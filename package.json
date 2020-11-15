@@ -4,6 +4,7 @@
   "description": "app made to take notes",
   "main": "server.js",
   "scripts": {
+    "start": "node ./Develop/server/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

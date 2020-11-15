@@ -32,7 +32,6 @@ app.get("/notes", function(request, response){
     response.sendFile(path.join(__dirname, "../public/notes.html"));
 });
 
-
 app.get("/api/notes", function(req, res){
     fs.readFile("Develop/db/db.json", "utf8", (err, data) => {
         if(err) throw err;
@@ -63,9 +62,7 @@ app.post("/api/notes", function(req, res){
 });
 
 app.delete("/api/notes/:id", (req, res) => {
-    // console.log(req.params.id);
     const deleteNoteWithThisId = req.params.id;
-    console.log(deleteNoteWithThisId);
     let postDeleteArr = [];
     fs.readFile("Develop/db/db.json", "utf8", (err, data) => {
         let dbArr = JSON.parse(data);
@@ -73,7 +70,6 @@ app.delete("/api/notes/:id", (req, res) => {
 
         for(let i = 0; i < dbArr.length; i++){
             if(dbArr[i].id !== deleteNoteWithThisId){
-                console.log("this should appear twice")
                 postDeleteArr.push(dbArr[i]);
             };
         };
