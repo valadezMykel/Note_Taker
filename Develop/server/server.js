@@ -1,11 +1,10 @@
 const express = require("express");
 const path = require("path");
 const fs = require("fs");
-const { request } = require("http");
-const { json } = require("express");
+const uniqid = require("uniqid");
 
 const app = express();
-const PORT = 4400;
+const PORT = process.env.PORT || 4400;
 
 app.use(express.static("./Develop/public"));
 app.use(express.json());
@@ -21,6 +20,12 @@ app.use(express.urlencoded({ extended: true }));
         
 //         return tt;
 //     });
+// };
+
+// function getId(){
+//     id.increment();
+//     let assignId = id.count;
+//     return assignId;
 // };
 
 app.get("/notes", function(request, response){
@@ -41,8 +46,9 @@ app.get("*", function(req, res){
 });
 
 app.post("/api/notes", function(req, res){
-    // takes db, parses, then pushes new object, then puts it back into db
     let saveThisNote = req.body;
+    saveThisNote.id = uniqid();
+    console.log(saveThisNote.id)
     let updateThisArr;
 
     fs.readFile("Develop/db/db.json", "utf8", (err, data) => {
@@ -56,7 +62,29 @@ app.post("/api/notes", function(req, res){
     res.json(saveThisNote);
 });
 
-app.delete("/api/notes/:id", function(req, res){
+app.delete("/api/notes/:id", (req, res) => {
+    // console.log(req.params.id);
+    const deleteNoteWithThisId = req.params.id;
+    console.log(deleteNoteWithThisId);
+    let postDeleteArr = [];
+    fs.readFile("Develop/db/db.json", "utf8", (err, data) => {
+        let dbArr = JSON.parse(data);
+        console.log(dbArr);
+
+        for(let i = 0; i < dbArr.length; i++){
+            if(dbArr[i].id !== deleteNoteWithThisId){
+                console.log("this should appear twice")
+                postDeleteArr.push(dbArr[i]);
+            };
+        };
+
+        postDeleteArr = JSON.stringify(postDeleteArr);
+
+        fs.writeFile("Develop/db/db.json", postDeleteArr, (err) => {
+            if(err) throw err
+            res.send()
+        });
+    });
 
 });
 
