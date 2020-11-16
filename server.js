@@ -29,7 +29,7 @@ app.use(express.urlencoded({ extended: true }));
 // };
 
 app.get("/notes", function(request, response){
-    response.sendFile(path.join(__dirname, "../public/notes.html"));
+    response.sendFile(path.join(__dirname, "Develop/public/notes.html"));
 });
 
 app.get("/api/notes", function(req, res){
@@ -41,13 +41,13 @@ app.get("/api/notes", function(req, res){
 });
 
 app.get("*", function(req, res){
-    res.sendFile(path.join(__dirname, "../public/index.html"));
+    res.sendFile(path.join(__dirname, "Develop/public/index.html"));
 });
 
 app.post("/api/notes", function(req, res){
     let saveThisNote = req.body;
     saveThisNote.id = uniqid();
-    console.log(saveThisNote.id)
+    
     let updateThisArr;
 
     fs.readFile("Develop/db/db.json", "utf8", (err, data) => {
@@ -66,7 +66,6 @@ app.delete("/api/notes/:id", (req, res) => {
     let postDeleteArr = [];
     fs.readFile("Develop/db/db.json", "utf8", (err, data) => {
         let dbArr = JSON.parse(data);
-        console.log(dbArr);
 
         for(let i = 0; i < dbArr.length; i++){
             if(dbArr[i].id !== deleteNoteWithThisId){
